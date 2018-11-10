@@ -1,6 +1,6 @@
 # Foundation-vue
 
-> Foundation Meetup + vuetify + firebase
+> Foundation Registration form + vuetify + vuex + firebase
 
 ## Build Setup
 
