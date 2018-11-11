@@ -170,14 +170,19 @@
         <td class="text-xs-left">{{ props.item.medicalBox }}</td>
         <td class="justify-center layout px-0">
           <v-icon
-            small
+            class="mr-2"
+            @click="show(props.item)"
+          >
+            remove_red_eye
+          </v-icon>
+
+          <v-icon
             class="mr-2"
             @click="editItem(props.item)"
           >
             edit
           </v-icon>
           <v-icon
-            small
             @click="deleteItem(props.item)"
           >
             delete
@@ -194,39 +199,73 @@
     </v-flex>
     </v-layout>
 
-  <!--   <v-layout row justify-center>
+    <v-layout row justify-center>
         <v-dialog
-          v-model="isActive"
-          max-width="290"
+        v-model="isActive"
+        persistent
+          max-width="800"
         >
           <v-card>
-            <v-card-title class="headline text-center">Delete Record?</v-card-title>
-            <v-card-text>
-              Are you sure? You cannot recover this foundation's record anymore
+            <v-card-title class="headline text-center">{{ this.editedItem.name }}</v-card-title>
+            <v-layout row wrap>
+            <v-flex md4 sm4>
+              <v-card-text><strong>Email:</strong> {{ this.editedItem.email }}
+              </v-card-text>
+            </v-flex> 
+            <v-flex>
+            <v-card-text><strong>Mobile:</strong> {{ this.editedItem.phone }}
+            </v-card-text> 
+            </v-flex>
+            <v-flex md4 sm4>
+            <v-card-text><strong>Total Population:</strong> {{ this.editedItem.population }}
+            </v-card-text> 
+            </v-flex>
+            <v-flex md4 sm4>
+            <v-card-text><strong>State:</strong> {{ this.editedItem.state }}
+            </v-card-text> 
+            </v-flex>
+            
+            <v-flex md4 sm4>
+            <v-card-text><strong>Youngest kid:</strong> {{ this.editedItem.youngest }}
             </v-card-text>
+            </v-flex>
+            <v-flex md4 sm4>
+            <v-card-text><strong>Eldest Kid: </strong> {{ this.editedItem.eldest }}
+            </v-card-text> 
+            </v-flex>
 
+            <v-flex md4 sm4>
+            <v-card-text><strong>Thermometer:</strong> {{ this.editedItem.thermometer }}
+            </v-card-text>  
+            </v-flex>
+
+            <v-flex md4 sm4>
+            <v-card-text><strong>Affiliated Clinic: </strong> {{ this.editedItem.affiliatedClinic }}
+            </v-card-text> 
+          </v-flex>
+          <v-flex md4 sm4>
+            <v-card-text><strong>Medical Box : </strong> {{ this.editedItem.medicalBox }}
+            </v-card-text>
+            </v-flex>
+             <v-flex md4 sm4>
+            <v-card-text><strong>Comments:</strong> {{ this.editedItem.comments }}
+            </v-card-text>
+            </v-flex>
+          </v-layout>
             <v-card-actions>
               <v-spacer></v-spacer>
 
               <v-btn
-                color="warning darken-1"
+                color="success darken-1"
                 flat="flat"
-                @click="cancel"
+                @click="close"
               >
-                Cancel
-              </v-btn>
-
-              <v-btn
-                color="teal darken-1"
-                flat="flat"
-                @click="agree"
-              >
-                Confirm
+                Close
               </v-btn>
             </v-card-actions>
           </v-card>
         </v-dialog>
-      </v-layout> -->
+      </v-layout>
   </div>
 </template>
 
@@ -308,6 +347,11 @@
     },
 
     methods: {
+      show(foundation){
+        this.isActive = true;
+        console.log(foundation);
+        this.editedItem =  foundation;
+      },
       initialize () {
         axios.get(apiDomain+'/foundations.json')
         .then(response => {
@@ -336,7 +380,8 @@
       },
 
       close () {
-        this.dialog = false
+        this.dialog = false;
+        this.isActive = false;
         setTimeout(() => {
           this.editedItem = Object.assign({}, this.defaultItem);
           this.editedIndex = -1;
